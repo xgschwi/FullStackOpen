@@ -1,5 +1,14 @@
 import React, { useState } from 'react'
 
+// Displays single statistic
+const Statistic = (props) => {
+  return(
+    <div>
+      <p>{props.text} {props.value}</p>
+    </div>
+  )
+}
+
 // Displays Statistics of button clicks
 // Uses Destructuring to extract good, neutral, and bad from props
 const Statistics = ({good, neutral, bad}) => {
@@ -15,17 +24,22 @@ const Statistics = ({good, neutral, bad}) => {
   else {
     return(
      <div>
-       <p>Good {good}</p>
-       <p>Neutral {neutral}</p>
-       <p>Bad {bad}</p>
-       <p>All {total}</p>
-       <p>Average {avg}</p>
-       <p>Positive {good/total*100} %</p>
+       <Statistic text="Good" value={good}/>
+       <Statistic text="Neutral" value={neutral}/>
+       <Statistic text="Bad" value={bad}/>
+       <Statistic text="All" value={total}/>
+       <Statistic text="Average" value={avg}/>
+       <Statistic text="Positive" value={good/total*100 + '%'}/>
      </div>
     )
   }
 }
 
+const Button = ({handleClick, text}) => {
+  return(
+      <button onClick={handleClick}>{text}</button>
+  )
+}
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -47,9 +61,11 @@ const App = () => {
   return (
     <div>
       <h3><strong>Give Feedback</strong></h3>
-      <button onClick={handleGood}>Good</button>
-      <button onClick={handleNeutral}>Neutral</button>
-      <button onClick={handleBad}>Bad</button>
+      
+      <Button handleClick={handleGood} text="Good"/>
+      <Button handleClick={handleNeutral} text="Neutral"/>
+      <Button handleClick={handleBad} text="Bad"/>
+
       <h3><strong>Statistics</strong></h3>
       <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
