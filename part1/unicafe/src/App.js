@@ -1,5 +1,22 @@
 import React, { useState } from 'react'
 
+// Displays Statistics of button clicks
+// Uses Destructuring to extract good, neutral, and bad from props
+const Statistics = ({good, neutral, bad}) => {
+  let total = good + neutral + bad
+  let avg = (good - bad) / total
+  
+  return(
+    <div>
+      <p>Good {good}</p>
+      <p>Neutral {neutral}</p>
+      <p>Bad {bad}</p>
+      <p>All {total}</p>
+      <p>Average {avg}</p>
+      <p>Positive {good/total*100} %</p>
+    </div>
+  )
+}
 
 const App = () => {
   // save clicks of each button to its own state
@@ -19,8 +36,6 @@ const App = () => {
     setBad(bad + 1)
   }
 
-  let total = good + neutral + bad
-  let avg = (good - bad) / total
   return (
     <div>
       <h3><strong>Give Feedback</strong></h3>
@@ -28,13 +43,7 @@ const App = () => {
       <button onClick={handleNeutral}>Neutral</button>
       <button onClick={handleBad}>Bad</button>
       <h3><strong>Statistics</strong></h3>
-      <p>Good {good}</p>
-      <p>Neutral {neutral}</p>
-      <p>Bad {bad}</p>
-      <p>All {total}</p>
-      <p>Average {avg}</p>
-      <p>Positive {good/total*100} %</p>
-
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
 }
