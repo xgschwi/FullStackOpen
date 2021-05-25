@@ -11,13 +11,26 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState([0, 0, 0, 0, 0, 0])
+
+  // Destructure points to copy into copy array
+  const copy = {...points}
 
   const rand = (anecdotes) => Math.floor(Math.random()*(anecdotes.length-1))
   
+  // Updates Vote count
+  const handleVotes = (copy) => {
+    copy[selected] += 1
+    setPoints(copy)
+  }
+
   return (
     <div>
       <p>{anecdotes[selected]}</p>
+      <p>Has {copy[selected]} Votes</p>
+      
       <button onClick={() => setSelected(rand(anecdotes))}>Next Anecdote</button>
+      <button onClick={() => handleVotes(copy)}>Vote</button>
     </div>
   )
 }
