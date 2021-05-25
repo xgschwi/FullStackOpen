@@ -48,6 +48,7 @@ const App = () => {
 
       <h5>Anecdote with most votes</h5>
       <p>{anecdotes[maxE]}</p>
+      <p>Has {copy[maxE]} Votes</p>
     </div>
   )
 }
