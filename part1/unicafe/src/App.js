@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 // Displays single statistic
 const Statistic = (props) => {
   return(
-    <div>
-      <p>{props.text} {props.value}</p>
-    </div>
+    <tr>
+      <td>{props.text}</td><td>{props.value}</td>
+    </tr>
   )
 }
 
@@ -23,14 +23,16 @@ const Statistics = ({good, neutral, bad}) => {
   }
   else {
     return(
-     <div>
+     <table>
+       <tbody>
        <Statistic text="Good" value={good}/>
        <Statistic text="Neutral" value={neutral}/>
        <Statistic text="Bad" value={bad}/>
        <Statistic text="All" value={total}/>
        <Statistic text="Average" value={avg}/>
        <Statistic text="Positive" value={good/total*100 + '%'}/>
-     </div>
+       </tbody>
+     </table>
     )
   }
 }
@@ -60,13 +62,13 @@ const App = () => {
 
   return (
     <div>
-      <h3><strong>Give Feedback</strong></h3>
+      <h3>Give Feedback</h3>
       
       <Button handleClick={handleGood} text="Good"/>
       <Button handleClick={handleNeutral} text="Neutral"/>
       <Button handleClick={handleBad} text="Bad"/>
 
-      <h3><strong>Statistics</strong></h3>
+      <h3>Statistics</h3>
       <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
