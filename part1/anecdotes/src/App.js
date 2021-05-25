@@ -12,8 +12,9 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState([0, 0, 0, 0, 0, 0])
+  const [maxE, setMax] = useState(0)
 
-  // Destructure points to copy into copy array
+  // Destructure points to copy into copy object
   const copy = {...points}
 
   const rand = (anecdotes) => Math.floor(Math.random()*(anecdotes.length-1))
@@ -22,15 +23,31 @@ const App = () => {
   const handleVotes = (copy) => {
     copy[selected] += 1
     setPoints(copy)
+    handleMax(copy)
+  }
+
+  // Update max element index from points
+  const handleMax = (c) => {
+    let i = 0
+    let max = maxE
+
+    // copy is an object after destructuring
+    for(i ; i < Object.keys(c).length; i++) if (c[i] > c[max]) max = i
+    
+    setMax(max)
   }
 
   return (
     <div>
+      <h5>Anecdote of the Day</h5>
       <p>{anecdotes[selected]}</p>
       <p>Has {copy[selected]} Votes</p>
-      
+
       <button onClick={() => setSelected(rand(anecdotes))}>Next Anecdote</button>
       <button onClick={() => handleVotes(copy)}>Vote</button>
+
+      <h5>Anecdote with most votes</h5>
+      <p>{anecdotes[maxE]}</p>
     </div>
   )
 }
