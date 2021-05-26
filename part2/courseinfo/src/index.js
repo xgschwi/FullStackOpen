@@ -17,9 +17,8 @@ const Header = ({ course }) => {
 }
 
 const Total = ({ course }) => {
-  const exercises = course.parts.map(part => part.exercises)
-  const sum = exercises.reduce((acc, ex) => acc + ex)
-  
+  const sum = course.parts.reduce((acc, ex) => acc + ex.exercises, 0)
+
   return(
     <p><strong>Number of exercises {sum}</strong></p>
   ) 
