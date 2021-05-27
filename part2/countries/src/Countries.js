@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React from 'react'
+import DisplayWeather from './DisplayWeather'
 
 const DisplayCountry =({country}) => {
     return(
@@ -13,6 +14,7 @@ const DisplayCountry =({country}) => {
         </ul>
 
         <img src={country.flag} height='100px' width='100px' alt="Country's flag"/>
+        <DisplayWeather capital={country.capital}/>
     </div>)
 }
 
@@ -20,7 +22,6 @@ const display = (country) => {
     return <DisplayCountry country={country}/>
 }
 
-const Country = ({country}) => <p>{country}</p>
 
 // Created to work around conditional statement to
 // Display the country information
