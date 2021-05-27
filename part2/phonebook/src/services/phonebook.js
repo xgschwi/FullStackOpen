@@ -13,4 +13,4 @@ const create = newPerson => {
 
 
 
-export default {getAll, create, update}
+export default {getAll, create}
