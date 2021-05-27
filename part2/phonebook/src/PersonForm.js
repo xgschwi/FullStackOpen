@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import phonebookServices from './services/phonebook'
 
 // Takes in new people to phonebook
 const PersonForm = ({newName, newNum, persons, setName, setNum, setPersons}) => {
@@ -19,10 +19,9 @@ const PersonForm = ({newName, newNum, persons, setName, setNum, setPersons}) => 
           const newPerson = { name: newName, number: newNum}
     
           setPersons(persons.concat(newPerson))
+          
+          phonebookServices.create(newPerson)
 
-          // Adds a new person to server
-          axios.post('http://localhost:3001/persons', newPerson)
-          .then(response => {console.log(response.data)})
           setName('')
           setNum('')
         }
