@@ -24,13 +24,23 @@ const PersonForm = ({newName, newNum, persons, setName, setNum, setPersons, setN
           const newPerson = {...result, number: newNum}
 
           phonebookServices.update(newPerson)
-          setPersons(persons.map(person => person.id !== newPerson.id
-            ? person
-            : {...person, number: newNum})
-          )
+          .then(data => {
+            setPersons(persons.map(person => person.id !== newPerson.id
+              ? person
+              : {...person, number: newNum})
+            )
+            setFlag(true)
+            setNotification(`Updated ${newName}'s number`)}
+            )
 
-          setFlag(true)
-          setNotification(`Updated ${newName}'s number`)
+          // Catch error where this person is no longer present in the server
+          .catch(e => {
+            setFlag(false)
+            setNotification(`Information of ${newName}'s has already been removed from the server`)
+
+            // Exclude the person who was already removed
+            setPersons(persons.filter(person => person.id !== newPerson.id))
+          })
         }
       }
 

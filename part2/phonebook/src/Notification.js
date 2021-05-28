@@ -6,22 +6,28 @@ const Notification = ({flag, message}) => {
 
     const successStyle = {
         color: 'green',
-        background: 'lightgrey',
+        borderColor: 'green',
+        background: 'aliceBlue',
         fontSize: 20,
         borderStyle: 'solid',
         borderRadius: 5,
         padding: 10,
-        marginBottom: 10
+        margin: 'auto',
+        textAlign: 'center',
+        width: 150
     }
 
     const errorStyle = {
         color: 'red',
-        background: 'lightgrey',
+        borderColor: 'red',
+        background: 'aliceBlue',
         fontSize: 20,
         borderStyle: 'solid',
         borderRadius: 5,
         padding: 10,
-        marginBottom: 10
+        margin: 'auto',
+        textAlign: 'center',
+        width: 700
     }
 
     if(flag)

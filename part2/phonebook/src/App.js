@@ -12,6 +12,7 @@ const App = () => {
   const [ filter, setFilter] = useState('')
   const [ notification, setNotification] = useState(null)
   const [ flag, setFlag] = useState(false)
+  
   useEffect(() => {
     phonebookServices.getAll()
     .then(response => setPersons(response))
