@@ -1,3 +1,5 @@
+const countBy = require('lodash/countBy')
+
 const dummy = (blogs) => 1
   
 const totalLikes = (blogs) => {
@@ -15,9 +17,11 @@ const totalLikes = (blogs) => {
 const favortiteBlog = (blogs) => {
   
   if(blogs.length === 0) return null
+  
   let max = 0
   let maxi = 0
   let iter = 0
+
   blogs.forEach(blog => {
     if(blog.likes > max) {
       max = blog.likes
@@ -30,8 +34,27 @@ const favortiteBlog = (blogs) => {
   
 }
 
+const mostBlogs = (blogs) => {
+  if(blogs.length === 0) return null
+
+  const auths = blogs.map(blog => blog.author)
+
+  const maxObj = countBy(auths, (a) => { return a })
+ 
+  const max = Object.keys(maxObj).reduce((a, b) => maxObj[a] > maxObj[b] ? a : b)
+
+  const a = {
+    author: max,
+    blogs: maxObj[max]
+  }
+  return a
+
+}
+
+
   module.exports = {
     dummy,
     totalLikes,
-    favortiteBlog
+    favortiteBlog,
+    mostBlogs
   }
