@@ -5,51 +5,29 @@ import phonebookServices from './services/phonebook'
 const PersonForm = ({newName, newNum, persons, setName, setNum, setPersons, setNotification, setFlag}) => {
 
   const addPerson = (event) => {
-      event.preventDefault()
-      const result = persons.find(person => person.name === newName)
-       
-      // If the person did not exist in the phonebook 
-      if(result === undefined) {
-        const newPerson = { name: newName, number: newNum}
-    
-        phonebookServices.create(newPerson)
+    event.preventDefault()
+
+      const newPerson = { name: newName, number: newNum}
+  
+      phonebookServices.create(newPerson)
+      .then(createdPerson => {
         setPersons(persons.concat(newPerson))
         setFlag(true)
         setNotification(`Added ${newName}`)
-      }
+      })
 
-      // If the person's number is updated
-      else {
-        if(window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
-          const newPerson = {...result, number: newNum}
+      // Catch error where this person is no longer present in the server
+      .catch(e => {
+        setFlag(false)
+        setNotification(e.response.data.error)
+      })
 
-          phonebookServices.update(newPerson)
-          .then(data => {
-            setPersons(persons.map(person => person.id !== newPerson.id
-              ? person
-              : {...person, number: newNum})
-            )
-            setFlag(true)
-            setNotification(`Updated ${newName}'s number`)}
-            )
+    // Reset Notification
+    setTimeout(() => {setFlag(false)}, 11000)
+    setTimeout(() => {setNotification(null)}, 10000)
 
-          // Catch error where this person is no longer present in the server
-          .catch(e => {
-            setFlag(false)
-            setNotification(`Information of ${newName}'s has already been removed from the server`)
-
-            // Exclude the person who was already removed
-            setPersons(persons.filter(person => person.id !== newPerson.id))
-          })
-        }
-      }
-
-      // Reset Notification
-      setTimeout(() => {setFlag(false)}, 11000)
-      setTimeout(() => {setNotification(null)}, 10000)
-
-      setName('')
-      setNum('')
+    setName('')
+    setNum('')
   }
 
   const handleNameChange = (event) => {
