@@ -81,6 +81,25 @@ describe('Supertesting Backend', () => {
     expect(titles).toContain('A Newer Blog to be added')
   })
 
+  test('create a new blog post, create likes property if likes is missing', async () => {
+    const newBlog = {
+      title: 'A Newer Blog to be added',
+      author: 'Esme H',
+      url: 'http://www.wikipedia.com/himalayas',
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+
+    expect(response.body[initialBlogs.length].likes).toEqual(0)
+    
+  })
+
 })
 
 
