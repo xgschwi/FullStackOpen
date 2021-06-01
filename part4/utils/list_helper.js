@@ -1,5 +1,32 @@
-const { values } = require('lodash')
 const countBy = require('lodash/countBy')
+const Blog = require('../models/blog')
+
+const initialBlogs = [
+  {
+    title: 'Go To Statement Considered Harmful',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    likes: 5
+  },
+  {
+    title: 'Go To Another Wiki',
+    author: 'Coco H',
+    url: 'http://www.wikipedia.com/tests',
+    likes: 3
+  },
+  {
+    title: 'Go To Another Place',
+    author: 'Coco H',
+    url: 'http://www.wikipedia.com/FullStack',
+    likes: 6
+  },
+  {
+    title: 'Go To Something Else',
+    author: 'Gigi H',
+    url: 'http://www.wikipedia.com',
+    likes: 2
+  }
+]
 
 const dummy = (blogs) => 1
   
@@ -79,10 +106,17 @@ const mostLikes = (blogs) => {
   return max
 }
 
+const blogsInDb = async () => {
+  const blogs = await Blog.find({})
+  return blogs.map(blog => blog.toJSON())
+}
+
   module.exports = {
     dummy,
     totalLikes,
     favortiteBlog,
     mostBlogs,
-    mostLikes
+    mostLikes,
+    blogsInDb,
+    initialBlogs
   }

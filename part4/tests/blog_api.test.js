@@ -3,46 +3,16 @@ const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
 const api = supertest(app)
-
-
-const initialBlogs = [
-  {
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5
-  },
-  {
-    title: 'Go To Another Wiki',
-    author: 'Coco H',
-    url: 'http://www.wikipedia.com/tests',
-    likes: 3
-  },
-  {
-    title: 'Go To Another Place',
-    author: 'Coco H',
-    url: 'http://www.wikipedia.com/FullStack',
-    likes: 6
-  },
-  {
-    title: 'Go To Something Else',
-    author: 'Gigi H',
-    url: 'http://www.wikipedia.com',
-    likes: 2
-  }
-]
-
+const helper = require('../utils/list_helper')
 
 beforeEach(async () => {
     await Blog.deleteMany({})
 
-    initialBlogs.forEach(async (blog) => {
-        const blogObject = new Blog(blog)
-        await blogObject.save()
-    })
+    for (let blog of helper.initialBlogs) {
+      let blogObject = new Blog(blog)
+      await blogObject.save()
+    }
 })
-
-describe('Supertesting Backend', () => {
 
 
   test('all blogs returned as JSON', async () => {
@@ -77,7 +47,7 @@ describe('Supertesting Backend', () => {
 
     const titles = response.body.map(blog => blog.title)
 
-    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
     expect(titles).toContain('A Newer Blog to be added')
   })
 
@@ -96,7 +66,7 @@ describe('Supertesting Backend', () => {
 
     const response = await api.get('/api/blogs')
 
-    expect(response.body[initialBlogs.length].likes).toEqual(0)
+    expect(response.body[helper.initialBlogs.length].likes).toEqual(0)
     
   })
 
@@ -111,10 +81,29 @@ describe('Supertesting Backend', () => {
     .expect(400)
 
     const response = await api.get('/api/blogs')
-    expect(response.body).toHaveLength(initialBlogs.length)
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
   })
 
-})
+
+  test('delete a blog post', async () => {
+
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    
+    await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+
+
+    const titles = blogsAtEnd.map(blog => blog.title)
+    expect(titles).not.toContain(blogToDelete.title)
+  })
+
+
 
 
 
