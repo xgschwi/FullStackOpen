@@ -1,3 +1,4 @@
+const { values } = require('lodash')
 const countBy = require('lodash/countBy')
 
 const dummy = (blogs) => 1
@@ -51,10 +52,37 @@ const mostBlogs = (blogs) => {
 
 }
 
+const mostLikes = (blogs) => {
+  if(blogs.length === 0) return null
+ 
+  // Key author, value likes. Use author key to make new blog list containing
+  const aLikes = blogs.reduce((blog, {author, likes}) => {
+    blog[author] = blog[author] || 0
+    blog[author] += likes
+    return blog
+  },{})
+
+
+  let mLikes = []
+
+  for(let k in aLikes)
+    if(aLikes.hasOwnProperty(k))
+      mLikes.push([k, aLikes[k]])
+
+  mLikes.sort((a, b) => b[1]-a[1])
+
+  const max = {
+    author: mLikes[0][0],
+    likes: mLikes[0][1]
+  }
+
+  return max
+}
 
   module.exports = {
     dummy,
     totalLikes,
     favortiteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
   }

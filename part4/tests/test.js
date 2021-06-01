@@ -274,3 +274,76 @@ describe('author with most blogs', () => {
     })
   })
 })
+
+
+describe('author with most likes', () => {
+
+  const listWithOneBlog = [
+    {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      likes: 5,
+      __v: 0
+    }
+  ]
+
+  const listWithNoBlog = []
+
+  const listWithManyBlogs = [
+    {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      likes: 5,
+      __v: 0
+    },
+    {
+      _id: '5a422aa71b54a67gdg4646f8',
+      title: 'Go To Another Wiki',
+      author: 'Coco H',
+      url: 'http://www.wikipedia.com/tests',
+      likes: 3,
+      __v: 0
+    },
+    {
+      _id: '5a422aa71b54a676fg344434',
+      title: 'Go To Another Place',
+      author: 'Coco H',
+      url: 'http://www.wikipedia.com/FullStack',
+      likes: 6,
+      __v: 0
+    },
+    {
+      _id: '5a42235351b54a676234d17f8',
+      title: 'Go To Something Else',
+      author: 'Gigi H',
+      url: 'http://www.wikipedia.com',
+      likes: 2,
+      __v: 0
+    }
+  ]
+
+  test('when list has only one blog, equal the author with the blog', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 5
+    })
+  })
+
+  test('when list has no blogs, return null', () => {
+    const result = listHelper.mostLikes(listWithNoBlog)
+    expect(result).toEqual(null)
+  })
+
+  test('when list has many blogs, equal author with most likes', () => {
+    const result = listHelper.mostLikes(listWithManyBlogs)
+    expect(result).toEqual({
+      author: "Coco H",
+      likes: 9
+    })
+  })
+})
