@@ -100,6 +100,20 @@ describe('Supertesting Backend', () => {
     
   })
 
+  test('create a new blog post, return code 400 if url or title is missing', async () => {
+    const newBlog = {
+      author: 'Esme H'
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(initialBlogs.length)
+  })
+
 })
 
 
