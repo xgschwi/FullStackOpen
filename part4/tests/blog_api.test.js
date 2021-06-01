@@ -59,6 +59,28 @@ describe('Supertesting Backend', () => {
     expect(response.body[0].id).toBeDefined()
   })
 
+  test('create a new blog, confirm increase in blogs', async () => {
+
+    const newBlog = {
+      title: 'A Newer Blog to be added',
+      author: 'Esme H',
+      url: 'http://www.wikipedia.com/himalayas',
+      likes: 16
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+
+    const titles = response.body.map(blog => blog.title)
+
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    expect(titles).toContain('A Newer Blog to be added')
+  })
+
 })
 
 
