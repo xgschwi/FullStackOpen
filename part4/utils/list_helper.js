@@ -70,6 +70,8 @@ const mostBlogs = (blogs) => {
 
   const maxObj = countBy(auths, (a) => { return a })
 
+  // using the maxObj containing the list of keys of authors with values of blogs written
+  // sort through each object through reduce to get the max author key
   const max = Object.keys(maxObj).reduce((a, b) => maxObj[a] > maxObj[b] ? a : b)
 
   const a = {
@@ -83,9 +85,9 @@ const mostBlogs = (blogs) => {
 const mostLikes = (blogs) => {
   if(blogs.length === 0) return null
 
-  // Key author, value likes. Use author key to make new blog list containing
+  // Key author, value likes. Use author key to make new blog list containing like total
   const aLikes = blogs.reduce((blog, { author, likes }) => {
-    blog[author] = blog[author] || 0
+    blog[author] = blog[author] || 0 // first time reaching author key, give 0 likes for further addition
     blog[author] += likes
     return blog
   },{})
@@ -94,6 +96,8 @@ const mostLikes = (blogs) => {
   let mLikes = []
 
   for(let k in aLikes)
+
+    // Push author and likes into array for sorting
     // eslint-disable-next-line no-prototype-builtins
     if(aLikes.hasOwnProperty(k))
       mLikes.push([k, aLikes[k]])
