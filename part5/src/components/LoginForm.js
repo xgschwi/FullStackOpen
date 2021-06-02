@@ -11,6 +11,9 @@ const LoginForm = ({username, password, setUsername, setPassword, user, setUser}
                 username, password
             })
 
+            window.localStorage.setItem(
+                'loggedBlogAppUser', JSON.stringify(user)
+            )
             setUser(user)
             setUsername('')
             setPassword('')
