@@ -1,5 +1,3 @@
-const jwbt = require('jsonwebtoken')
-
 const tokenExtractor = (request, response, next) => {
   
   const auth = request.get('authorization')

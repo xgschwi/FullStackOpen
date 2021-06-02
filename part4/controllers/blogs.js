@@ -41,8 +41,21 @@ blogRouter.post('/', async (request, response) => {
 })
 
 blogRouter.delete('/:id', async (request, response) => {
-    await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
+    
+    const dToken = jwbt.verify(request.token, process.env.SECRET)
+    if(!request.token || !dToken.id) {
+        response.status(400).json({error: "Invalid or missing token"})
+    }
+    else {
+        
+        const blog = await Blog.findById(request.params.id)
+    
+        if(blog.user.toString() === dToken.id.toString()) {
+            await Blog.findByIdAndRemove(request.params.id)
+            response.status(204).end()
+        }
+        else response.status(400).json({error: "User deleting blog is not the owner"})
+    }
 })
 
 blogRouter.put('/:id', async (request, response) => {
