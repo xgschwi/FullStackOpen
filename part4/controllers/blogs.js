@@ -17,7 +17,7 @@ blogRouter.post('/', async (request, response) => {
     if(!request.token || !dToken.id) 
         return response.status(401).json({error: 'token missing or invalid'})
 
-    const user = await User.findById(dToken.id)
+    const user = request.user
 
    // console.log(user)
     const blog = new Blog({
@@ -42,6 +42,8 @@ blogRouter.post('/', async (request, response) => {
 
 blogRouter.delete('/:id', async (request, response) => {
     
+    const user = request.user
+    
     const dToken = jwbt.verify(request.token, process.env.SECRET)
     if(!request.token || !dToken.id) {
         response.status(400).json({error: "Invalid or missing token"})
@@ -50,7 +52,8 @@ blogRouter.delete('/:id', async (request, response) => {
         
         const blog = await Blog.findById(request.params.id)
     
-        if(blog.user.toString() === dToken.id.toString()) {
+
+        if(blog.user.toString() === user._id.toString()) {
             await Blog.findByIdAndRemove(request.params.id)
             response.status(204).end()
         }
