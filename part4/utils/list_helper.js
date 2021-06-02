@@ -29,24 +29,24 @@ const initialBlogs = [
   }
 ]
 
-const dummy = (blogs) => 1
-  
+// eslint-disable-next-line no-unused-vars
+const dummy = (_blogs) => 1
+
 const totalLikes = (blogs) => {
 
   if (blogs.length === 0) return 0
   else if(blogs.length === 1) return blogs[0].likes
   else {
-    const x = {}
     return blogs.reduce((acc, blog) => {
-      return {likes: acc.likes + blog.likes}
+      return { likes: acc.likes + blog.likes }
     }).likes
-}
+  }
 }
 
 const favortiteBlog = (blogs) => {
-  
+
   if(blogs.length === 0) return null
-  
+
   let max = 0
   let maxi = 0
   let iter = 0
@@ -60,7 +60,7 @@ const favortiteBlog = (blogs) => {
   })
 
   return blogs[maxi]
-  
+
 }
 
 const mostBlogs = (blogs) => {
@@ -69,7 +69,7 @@ const mostBlogs = (blogs) => {
   const auths = blogs.map(blog => blog.author)
 
   const maxObj = countBy(auths, (a) => { return a })
- 
+
   const max = Object.keys(maxObj).reduce((a, b) => maxObj[a] > maxObj[b] ? a : b)
 
   const a = {
@@ -82,9 +82,9 @@ const mostBlogs = (blogs) => {
 
 const mostLikes = (blogs) => {
   if(blogs.length === 0) return null
- 
+
   // Key author, value likes. Use author key to make new blog list containing
-  const aLikes = blogs.reduce((blog, {author, likes}) => {
+  const aLikes = blogs.reduce((blog, { author, likes }) => {
     blog[author] = blog[author] || 0
     blog[author] += likes
     return blog
@@ -94,6 +94,7 @@ const mostLikes = (blogs) => {
   let mLikes = []
 
   for(let k in aLikes)
+    // eslint-disable-next-line no-prototype-builtins
     if(aLikes.hasOwnProperty(k))
       mLikes.push([k, aLikes[k]])
 
@@ -118,13 +119,13 @@ const usersInDb = async () => {
 }
 
 
-  module.exports = {
-    dummy,
-    totalLikes,
-    favortiteBlog,
-    mostBlogs,
-    mostLikes,
-    blogsInDb,
-    initialBlogs,
-    usersInDb
-  }
+module.exports = {
+  dummy,
+  totalLikes,
+  favortiteBlog,
+  mostBlogs,
+  mostLikes,
+  blogsInDb,
+  initialBlogs,
+  usersInDb
+}

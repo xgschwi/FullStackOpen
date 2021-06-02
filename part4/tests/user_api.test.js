@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const supertest = require('supertest')
@@ -11,7 +12,7 @@ describe('when there is initially one user in db', () => {
     await User.deleteMany({})
 
     const passwordHash = await bcrypt.hash('Cats', 10)
-    
+
     const user = new User({ username: 'root', passwordHash })
 
     await user.save()
@@ -146,5 +147,5 @@ describe('when there is initially one user in db', () => {
 })
 
 afterAll(() => {
-    mongoose.connection.close()
+  mongoose.connection.close()
 })
