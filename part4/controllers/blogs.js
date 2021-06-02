@@ -12,10 +12,9 @@ blogRouter.get('/', async (request, response) => {
   
 blogRouter.post('/', async (request, response) => {
     const body = request.body
-    const token = helper.getTokenFrom(request)
 
-    const dToken = jwbt.verify(token, process.env.SECRET)
-    if(!token || !dToken.id) 
+    const dToken = jwbt.verify(request.token, process.env.SECRET)
+    if(!request.token || !dToken.id) 
         return response.status(401).json({error: 'token missing or invalid'})
 
     const user = await User.findById(dToken.id)
