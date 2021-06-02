@@ -1,6 +1,7 @@
 const countBy = require('lodash/countBy')
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwbt = require('jsonwebtoken')
 
 const initialBlogs = [
   {
@@ -116,6 +117,13 @@ const usersInDb = async () => {
   const users = await User.find({})
   return users.map(u => u.toJSON())
 }
+
+const getTokenFrom = req => {
+  const auth = req.get('authorization')
+  if(auth && auth.toLowerCase().startsWith('bearer ')) return auth.substring(7)
+  else return null
+}
+
   module.exports = {
     dummy,
     totalLikes,
@@ -124,5 +132,6 @@ const usersInDb = async () => {
     mostLikes,
     blogsInDb,
     initialBlogs,
-    usersInDb
+    usersInDb,
+    getTokenFrom
   }
