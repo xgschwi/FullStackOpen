@@ -104,6 +104,32 @@ beforeEach(async () => {
   })
 
 
+  test('update a blog post\'s likes', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = {
+      title: blogsAtStart[0].title,
+      author: blogsAtStart[0].author,
+      url: blogsAtStart[0].url,
+      likes: blogsAtStart[0].likes,
+      __v: blogsAtStart[0].__v,
+      id: blogsAtStart[0].id
+    }
+
+    const newLikes = 20
+    const newBlog = blogToUpdate
+    newBlog.likes = newLikes
+
+
+    await api
+    .put(`/api/blogs/${blogsAtStart[0].id}`)
+    .send(newBlog)
+    .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd[0].id).toEqual(newBlog.id)
+    expect(blogsAtEnd[0].likes).toEqual(newLikes)
+    
+  })
 
 
 
