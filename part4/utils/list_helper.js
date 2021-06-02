@@ -88,7 +88,7 @@ const mostLikes = (blogs) => {
   // Key author, value likes. Use author key to make new blog list containing like total
   const aLikes = blogs.reduce((blog, { author, likes }) => {
     blog[author] = blog[author] || 0 // first time reaching author key, give 0 likes for further addition
-    blog[author] += likes
+    blog[author] = blog[author] + likes
     return blog
   },{})
 
