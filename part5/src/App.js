@@ -84,9 +84,11 @@ const App = () => {
               blogService.setToken('')
               setUser(null)
               }}
-              >Logout</button></p>
+              >Logout
+              </button></p>
 
-              {blogForm()}
+            {blogForm()}
+
             {blogs.map(blog =>
               <Blog key={blog.id} blog={blog} />
             )}
