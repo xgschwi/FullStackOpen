@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -14,6 +15,16 @@ const App = () => {
   const [ notification, setNotification] = useState(null)
   const [ flag, setFlag] = useState(false)
 
+
+  const blogFormRef = useRef()
+
+  const blogForm = () => {
+    return(
+    <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
+      <BlogForm createBlog={addBlog}/>
+    </Togglable>
+    )
+  }
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -32,6 +43,28 @@ const App = () => {
     }
     catch(e) {console.log(e)}
   }, [])
+
+  const addBlog = (blogObj) => {
+    blogFormRef.current.toggleVisibility()
+
+    blogService.create(blogObj).then(res => {
+      setBlogs(blogs.concat(res))
+      
+      setFlag(true)
+      setNotification(`A new blog ${res.title} by ${res.author} added`)
+
+    })
+    .catch(e => {
+      setFlag(false)
+      setNotification(e.response.data)
+
+    })
+
+    setTimeout(() => {
+      setNotification(null)
+      setFlag(false)
+    }, 10000)
+  }
 
   return (
 
@@ -52,9 +85,8 @@ const App = () => {
               setUser(null)
               }}
               >Logout</button></p>
-              <BlogForm setBlogs = {setBlogs}
-              setFlag = {setFlag} setNotification = {setNotification}
-              />
+
+              {blogForm()}
             {blogs.map(blog =>
               <Blog key={blog.id} blog={blog} />
             )}
