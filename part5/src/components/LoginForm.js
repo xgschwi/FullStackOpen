@@ -2,7 +2,7 @@ import React from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-const LoginForm = ({username, password, setUsername, setPassword, user, setUser}) => {
+const LoginForm = ({username, password, setUsername, setPassword, user, setUser, setFlag, setNotification}) => {
 
     const handleLogin = async (event) => {
         event.preventDefault()
@@ -17,10 +17,22 @@ const LoginForm = ({username, password, setUsername, setPassword, user, setUser}
             window.localStorage.setItem(
                 'loggedBlogAppUser', JSON.stringify(user)
             )
+
+            setFlag(true)
+            setNotification(`Successfully signed in!`)
+
             setUser(user)
             setUsername('')
             setPassword('')
-        } catch(e) {console.log(e)}
+        } catch(e) {
+            setFlag(false)
+            setNotification("Wrong username or password")
+        }
+
+        setTimeout(() => {
+            setNotification(null)
+            setFlag(false)
+        }, 5000)
     }
 
     return (
