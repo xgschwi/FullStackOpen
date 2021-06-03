@@ -1,5 +1,6 @@
 import React from 'react'
 import loginService from '../services/login'
+import blogService from '../services/blogs'
 
 const LoginForm = ({username, password, setUsername, setPassword, user, setUser}) => {
 
@@ -10,6 +11,8 @@ const LoginForm = ({username, password, setUsername, setPassword, user, setUser}
             const user = await loginService.login({
                 username, password
             })
+
+            blogService.setToken(user.token)
 
             window.localStorage.setItem(
                 'loggedBlogAppUser', JSON.stringify(user)
@@ -26,13 +29,13 @@ const LoginForm = ({username, password, setUsername, setPassword, user, setUser}
             <h2>Log in to application</h2>
             <div>
                 username 
-                <input text="text" value={username} name="Username"
+                <input value={username} name="Username"
                 onChange={({target}) => setUsername(target.value)}
                 />
             </div>
             <div>
                 password
-                <input text="text" value={password} name="Password"
+                <input value={password} name="Password"
                 onChange={({target}) => setPassword(target.value)}
                 />
             </div>

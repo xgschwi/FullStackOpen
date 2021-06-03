@@ -9,4 +9,7 @@ const login = async credentials => {
 const logout = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
 }
-export default {login, logout}
+
+const exportObj = {login, logout}
+
+export default exportObj

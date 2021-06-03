@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import loginService from './services/login'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -23,6 +24,7 @@ const App = () => {
       if(loggedUserJSON) {
         const user = JSON.parse(loggedUserJSON)
         setUser(user)
+        blogService.setToken(user.token)
       }
     }
     catch(e) {console.log(e)}
@@ -41,9 +43,11 @@ const App = () => {
             <p>{user.name} logged in
             <button onClick={() => {
               loginService.logout(setUser)
+              blogService.setToken('')
               setUser(null)
               }}
               >Logout</button></p>
+              <BlogForm setBlogs = {setBlogs}/>
             {blogs.map(blog =>
               <Blog key={blog.id} blog={blog} />
             )}
