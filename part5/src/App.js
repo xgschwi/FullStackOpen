@@ -18,6 +18,12 @@ const App = () => {
 
   const blogFormRef = useRef()
 
+  // Called to sort and set blog list
+  const sortBlog = (bSort) => {
+    const sorted = [...bSort].sort((b1, b2) => b2.likes - b1.likes)
+      setBlogs( sorted )
+  }
+  
   const blogForm = () => {
     return(
     <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
@@ -27,8 +33,9 @@ const App = () => {
   }
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+    blogService.getAll().then(sBlogs => {
+      sortBlog(sBlogs)
+    }
     )  
   }, [])
 
@@ -48,7 +55,9 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
 
     blogService.create(blogObj).then(res => {
-      setBlogs(blogs.concat(res))
+
+      sortBlog(blogs.concat(res))
+      //setBlogs(blogs.concat(res))
       
       setFlag(true)
       setNotification(`A new blog ${res.title} by ${res.author} added`)
@@ -69,7 +78,8 @@ const App = () => {
   const addLike = (blog) => {
     blog.likes = blog.likes + 1
     blogService.update(blog).then(res => {
-      setBlogs(blogs.map(b => b.id !== blog.id
+
+      sortBlog(blogs.map(b => b.id !== blog.id
         ? b
         : blog
       ))
