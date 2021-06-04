@@ -23,7 +23,7 @@ const App = () => {
     const sorted = [...bSort].sort((b1, b2) => b2.likes - b1.likes)
       setBlogs( sorted )
   }
-  
+
   const blogForm = () => {
     return(
     <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
@@ -79,13 +79,32 @@ const App = () => {
     blog.likes = blog.likes + 1
     blogService.update(blog).then(res => {
 
-      sortBlog(blogs.map(b => b.id !== blog.id
-        ? b
-        : blog
-      ))
+    sortBlog(blogs.map(b => b.id !== blog.id
+      ? b
+      : blog
+    ))
     })
     
   }
+
+  const removeBlog = (blog) => {
+    const result = window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
+    
+    if (result) 
+    blogService.remove(blog).then(res => {
+      setBlogs([...blogs].filter(b => b.id !== blog.id))
+    })
+    .catch(e => {
+      setFlag(false)
+      setNotification(e.response.data)
+    })
+
+    setTimeout(() => {
+      setNotification(null)
+      setFlag(false)
+    }, 10000)
+  }
+  
   return (
 
     <div>
@@ -109,9 +128,10 @@ const App = () => {
 
             {blogForm()}
 
-            {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} addLike={addLike} />
-            )}
+            {blogs.map(blog => { if(blog !== undefined) 
+              return <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} user={user}/>
+              else return null
+              })}
         </div>
       }
       
