@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
-const Blog = ({blog, addLike, removeBlog, user}) => {
+const Blog = ({ blog, addLike, removeBlog, user }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -16,10 +16,10 @@ const Blog = ({blog, addLike, removeBlog, user}) => {
   return(
     <div style={blogStyle}>
       <p>
-         {blog.title} {blog.author}   
-         <button onClick={()=> setView(!view)}>View</button>
+        {blog.title} {blog.author}
+        <button onClick={() => setView(!view)}>View</button>
       </p>
-      
+
       {view ?
         <div>
           <p>{blog.url}</p>
@@ -32,9 +32,9 @@ const Blog = ({blog, addLike, removeBlog, user}) => {
             null
           }
         </div>
-      : null
+        : null
       }
-    </div>  
+    </div>
   )
 }
 
