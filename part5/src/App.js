@@ -66,6 +66,16 @@ const App = () => {
     }, 10000)
   }
 
+  const addLike = (blog) => {
+    blog.likes = blog.likes + 1
+    blogService.update(blog).then(res => {
+      setBlogs(blogs.map(b => b.id !== blog.id
+        ? b
+        : blog
+      ))
+    })
+    
+  }
   return (
 
     <div>
@@ -90,7 +100,7 @@ const App = () => {
             {blogForm()}
 
             {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
+              <Blog key={blog.id} blog={blog} addLike={addLike} />
             )}
         </div>
       }
