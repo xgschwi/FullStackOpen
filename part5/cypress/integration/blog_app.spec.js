@@ -52,4 +52,26 @@ describe('Blog app', function() {
         .and('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.login({ username: 'xgschwi', password: 'Cats' })
+    })
+
+    it('A blog can be created', function() {
+      const blog = {
+        title: 'A new test blog',
+        author: 'Xavier',
+        url: 'someTestBlog.com',
+        likes: 0,
+        user: {
+          name: 'Xavier', username: 'xgschwi', password: 'Cats'
+        }
+      }
+
+      cy.createBlog(blog)
+
+      cy.contains('A new test blog')
+    })
+  })
 })
