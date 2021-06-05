@@ -76,8 +76,8 @@ describe('Blog app', function() {
 
     describe('When a blog is created', function() {
       beforeEach(function() {
-        const blog = {
-          title: 'A new test blog',
+        const blog1 = {
+          title: 'A new test blog1',
           author: 'Xavier',
           url: 'someTestBlog.com',
           likes: 0,
@@ -86,31 +86,67 @@ describe('Blog app', function() {
           }
         }
 
-        cy.createBlog(blog)
+        cy.createBlog(blog1)
+
+        const blog2 = {
+          title: 'A new test blog2',
+          author: 'Xavier',
+          url: 'someTestBlog.com',
+          likes: 3,
+          user: {
+            name: 'Xavier', username: 'xgschwi', password: 'Cats'
+          }
+        }
+
+        cy.createBlog(blog2)
+
+        const blog3 = {
+          title: 'A new test blog3',
+          author: 'Xavier',
+          url: 'someTestBlog.com',
+          likes: 4,
+          user: {
+            name: 'Xavier', username: 'xgschwi', password: 'Cats'
+          }
+        }
+
+        cy.createBlog(blog3)
+
+        const blog4 = {
+          title: 'A new test blog4',
+          author: 'Xavier',
+          url: 'someTestBlog.com',
+          likes: 5,
+          user: {
+            name: 'Xavier', username: 'xgschwi', password: 'Cats'
+          }
+        }
+
+        cy.createBlog(blog4)
       })
 
       it('A User can like a blog', function() {
-        cy.contains('A new test blog')
+        cy.contains('A new test blog1')
           .contains('View')
           .click()
 
-        cy.contains('A new test blog').parent()
+        cy.contains('A new test blog1').parent()
           .should('contain', 'Likes 0')
 
-        cy.contains('A new test blog').parent().find('.likeBtn').click()
+        cy.contains('A new test blog1').parent().find('.likeBtn').click()
 
-        cy.contains('A new test blog').parent()
+        cy.contains('A new test blog1').parent()
           .should('contain', 'Likes 1')
       })
 
       it('A user who created a blog can delete it',  function() {
-        cy.contains('A new test blog')
+        cy.contains('A new test blog1')
           .contains('View')
           .click()
 
-        cy.contains('A new test blog').parent().find('.deleteBtn').click()
+        cy.contains('A new test blog1').parent().find('.deleteBtn').click()
 
-        cy.should('not.exist', 'A new test blog')
+        cy.should('not.exist', 'A new test blog1')
       })
 
       it('A user who did not create a blog cannot delete it',  function() {
@@ -122,12 +158,37 @@ describe('Blog app', function() {
 
         cy.login({ username: 'ronald', password: 'Dogs' })
 
-        cy.contains('A new test blog')
+        cy.contains('A new test blog1')
           .contains('View')
           .click()
 
-        cy.get('A new test blog')
+        cy.get('A new test blog1')
           .should('not.exist', '.deleteBtn')
+      })
+
+      it('Blogs are sorted by likes', function() {
+        cy.contains('A new test blog1')
+          .contains('View')
+          .click()
+        cy.contains('A new test blog2')
+          .contains('View')
+          .click()
+        cy.contains('A new test blog3')
+          .contains('View')
+          .click()
+        cy.contains('A new test blog4')
+          .contains('View')
+          .click()
+
+        cy.get('.blog')
+          .should('have.length', 4)
+          .then(($els) => {
+
+            const res = Cypress.$.makeArray($els)
+              .map((el) => el.innerText)
+            expect(res[0]).contains('A new test blog4')
+
+          })
       })
     })
   })
