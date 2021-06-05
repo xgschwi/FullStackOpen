@@ -101,7 +101,33 @@ describe('Blog app', function() {
 
         cy.contains('A new test blog').parent()
           .should('contain', 'Likes 1')
+      })
 
+      it('A user who created a blog can delete it',  function() {
+        cy.contains('A new test blog')
+          .contains('View')
+          .click()
+
+        cy.contains('A new test blog').parent().find('.deleteBtn').click()
+
+        cy.should('not.exist', 'A new test blog')
+      })
+
+      it('A user who did not create a blog cannot delete it',  function() {
+        const user2 = {
+          name: 'Ron', username: 'ronald', password: 'Dogs'
+        }
+
+        cy.request('POST', 'http://localhost:3003/api/users/', user2)
+
+        cy.login({ username: 'ronald', password: 'Dogs' })
+
+        cy.contains('A new test blog')
+          .contains('View')
+          .click()
+
+        cy.get('A new test blog')
+          .should('not.exist', '.deleteBtn')
       })
     })
   })
