@@ -31,9 +31,9 @@ const Notification = ({ flag, message }) => {
   }
 
   if(flag)
-    return (<div style={successStyle}>{message}</div>)
+    return (<div className="success" style={successStyle}>{message}</div>)
   else
-    return <div style={errorStyle}>{message}</div>
+    return <div className="error" style={errorStyle}>{message}</div>
 
 }
 
