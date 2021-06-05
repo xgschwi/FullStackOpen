@@ -24,11 +24,11 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
         <div>
           <p>{blog.url}</p>
           <p>Likes {blog.likes}
-            <button onClick={() => addLike(blog)}>Like</button>
+            <button className='likeBtn' onClick={() => addLike(blog)}>Like</button>
           </p>
           <p>{blog.user.name}</p>
           { user.username === blog.user.username ?
-            <button onClick={() => removeBlog(blog)}>Remove</button> :
+            <button className='deleteBtn' onClick={() => removeBlog(blog)}>Remove</button> :
             null
           }
         </div>

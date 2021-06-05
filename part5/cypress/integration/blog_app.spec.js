@@ -73,5 +73,36 @@ describe('Blog app', function() {
 
       cy.contains('A new test blog')
     })
+
+    describe('When a blog is created', function() {
+      beforeEach(function() {
+        const blog = {
+          title: 'A new test blog',
+          author: 'Xavier',
+          url: 'someTestBlog.com',
+          likes: 0,
+          user: {
+            name: 'Xavier', username: 'xgschwi', password: 'Cats'
+          }
+        }
+
+        cy.createBlog(blog)
+      })
+
+      it('A User can like a blog', function() {
+        cy.contains('A new test blog')
+          .contains('View')
+          .click()
+
+        cy.contains('A new test blog').parent()
+          .should('contain', 'Likes 0')
+
+        cy.contains('A new test blog').parent().find('.likeBtn').click()
+
+        cy.contains('A new test blog').parent()
+          .should('contain', 'Likes 1')
+
+      })
+    })
   })
 })
