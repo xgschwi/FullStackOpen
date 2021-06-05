@@ -42,3 +42,30 @@ test('Renders Url or likes after view button pressed', () => {
   expect(component.container).toHaveTextContent('test.someurl.com')
   expect(component.container).toHaveTextContent('Likes 3')
 })
+
+
+test('Increments blog likes by 2 when clicked twice', () => {
+  const blog = {
+    title: 'A test blog',
+    author: 'Xavier G',
+    url: 'test.someurl.com',
+    likes: 3,
+    user: { name: 'Xavier', username: 'root' }
+  }
+
+  const mockHandler = jest.fn()
+
+  const component = render(
+    <Blog blog={blog} user={ { name: 'Xavier', username: 'root' }}
+      addLike={mockHandler}/>
+  )
+
+  const button1 = component.getByText('View')
+  fireEvent.click(button1)
+
+  const button2 = component.getByText('Like')
+  fireEvent.click(button2)
+  fireEvent.click(button2)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+})
