@@ -14,7 +14,7 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
   const [view, setView] = useState(false)
 
   return(
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       <p>
         {blog.title} {blog.author}
         <button onClick={() => setView(!view)}>View</button>
