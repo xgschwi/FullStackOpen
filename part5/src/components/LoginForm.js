@@ -41,18 +41,18 @@ const LoginForm = ({ username, password, setUsername, setPassword, setUser, setF
       <h2>Log in to application</h2>
       <div>
                 username
-        <input value={username} name="Username"
+        <input id='username' value={username} name="Username"
           onChange={({ target }) => setUsername(target.value)}
         />
       </div>
       <div>
                 password
-        <input value={password} name="Password"
+        <input id='password' value={password} name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
       <div>
-        <button type = "submit">Login</button>
+        <button id='submitLogin' type = "submit">Login</button>
       </div>
     </form>
   )
