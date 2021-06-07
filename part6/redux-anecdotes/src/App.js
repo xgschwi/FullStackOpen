@@ -8,7 +8,7 @@ const App = () => {
 
   const vote = (id) => {
     console.log('vote', id)
-
+    
     dispatch(voteAnecdote(id))
   }
 
@@ -19,7 +19,7 @@ const App = () => {
     event.target.content.value = ''
     dispatch(createAnecdote(anecdote))
   }
-  
+
   return (
     <div>
       <h2>Anecdotes</h2>
