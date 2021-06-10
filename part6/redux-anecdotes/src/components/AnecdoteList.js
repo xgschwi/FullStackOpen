@@ -5,12 +5,14 @@ import { notify, reset } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
 
-  const anecdotes = useSelector(state => state.anecdotes)
+  const anecdotes = useSelector(state => state.filter === '' 
+    ? state.anecdotes
+    : state.anecdotes.filter(a => a.content.toLowerCase().includes(state.filter.toLowerCase()))
+  )
+
   const dispatch = useDispatch()
 
   const vote = (id, content) => {
-    console.log('vote', id)
-
     dispatch(voteAnecdote(id))
 
     dispatch(notify(`You voted ${ content }`))

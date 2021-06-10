@@ -6,7 +6,6 @@ import store from './store'
 
 store.subscribe(() => { store.getState() })
 
-
 ReactDOM.render(
   <Provider store={store}>
     <App />
