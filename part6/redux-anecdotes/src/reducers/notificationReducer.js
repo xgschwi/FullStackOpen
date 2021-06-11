@@ -1,3 +1,5 @@
+let timeId
+
 const reducer = (state = '', action) => {
   switch(action.type) {
       case 'NOTIFY':
@@ -17,9 +19,14 @@ const showNotification = (message) => {
 }
 export const notify = (message, duration) => {
   return async dispatch => {
+    if (timeId !== undefined) {
+      clearTimeout(timeId)
+    }
+
     dispatch(showNotification(message))
 
-    setTimeout(()=> {dispatch(reset())}, duration * 1000)
+    
+    timeId = setTimeout(()=> {dispatch(reset())}, duration * 1000)
   }
 }
 
