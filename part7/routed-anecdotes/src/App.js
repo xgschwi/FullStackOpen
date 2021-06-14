@@ -96,21 +96,24 @@ const CreateNew = (props) => {
     info.reset()
   }
 
+  const noReset = ({reset, ...rest}) => rest
+
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content}/>
+          <input {...noReset(content)}/>
         </div>
         <div>
           author
-          <input {...author}/>
+          <input {...noReset(author)}/>
         </div>
         <div>
           url for more info
-          <input {...info}/>
+          <input {...noReset(info)}/>
         </div>
         <button type='submit'>create</button>
         <button type='reset' onClick={() => handleReset()}>reset</button>
