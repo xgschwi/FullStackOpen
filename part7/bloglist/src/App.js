@@ -32,6 +32,7 @@ const App = () => {
     dispatch(setBlogs( sorted ))
   }
 
+  // Displays a collapsible blog form
   const blogForm = () => {
     return(
       <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
@@ -40,6 +41,7 @@ const App = () => {
     )
   }
 
+  // Retrieves all blogs
   useEffect(() => {
     blogService.getAll().then(sBlogs => {
       sortBlog(sBlogs)
@@ -47,6 +49,7 @@ const App = () => {
     )
   }, [])
 
+  // Retrives logged in user from local storage
   useEffect(() => {
     try {
       const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -59,6 +62,7 @@ const App = () => {
     catch(e) {console.log(e)}
   }, [])
 
+  // Adds a blog to view and database
   const addBlog = (blogObj) => {
     blogFormRef.current.toggleVisibility()
 
@@ -76,6 +80,7 @@ const App = () => {
       })
   }
 
+  // Adds a like to a blog
   const addLike = (blog) => {
     blog.likes = blog.likes + 1
     // eslint-disable-next-line no-unused-vars
@@ -89,17 +94,19 @@ const App = () => {
 
   }
 
+  // Removes blog from view and database
   const removeBlog = (blog) => {
     const result = window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
 
     if (result)
       // eslint-disable-next-line no-unused-vars
       blogService.remove(blog).then(res => {
-        setBlogs([...blogs].filter(b => b.id !== blog.id))
+        dispatch(setBlogs([...blogs].filter(b => b.id !== blog.id)))
       })
         .catch(e => {
           dispatch(setFlag(false))
-          dispatch(notify(e.response.data, 5))
+          dispatch(notify('Error in deleting blog', 5))
+          console.log(e)
         })
   }
 
@@ -116,7 +123,7 @@ const App = () => {
             <h2>blogs</h2>
             <p>{user.name} logged in
               <button onClick={() => {
-                loginService.logout(setUser)
+                loginService.logout()
                 blogService.setToken('')
                 dispatch(setUser(null))
               }}
