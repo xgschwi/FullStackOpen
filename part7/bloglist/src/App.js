@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+
+
 import blogService from './services/blogs'
-import LoginForm from './components/LoginForm'
 import loginService from './services/login'
+import userService from './services/users'
+
+import LoginForm from './components/LoginForm'
+import Users from './components/Users'
 import BlogForm from './components/BlogForm'
+import Blog from './components/Blog'
+
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
@@ -13,6 +19,11 @@ import { setBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
+import {
+  BrowserRouter as Router,
+  Switch, Route
+} from 'react-router-dom'
+
 // Run backend from part4 code
 const App = () => {
   const dispatch = useDispatch()
@@ -21,6 +32,8 @@ const App = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const [users, setUsers] = useState([])
 
   const user = useSelector(state => state.user)
 
@@ -42,12 +55,15 @@ const App = () => {
     )
   }
 
-  // Retrieves all blogs
+  // Retrieves all blogs and list of users
   useEffect(() => {
     blogService.getAll().then(sBlogs => {
       sortBlog(sBlogs)
     }
     )
+    userService.getAll().then(userList => {
+      setUsers(userList)
+    })
   }, [])
 
   // Retrives logged in user from local storage
@@ -121,22 +137,30 @@ const App = () => {
             setUsername = {setUsername} setPassword = {setPassword}
           /> :
           <div>
-            <h2>blogs</h2>
-            <p>{user.name} logged in
-              <button onClick={() => {
-                loginService.logout()
-                blogService.setToken('')
-                dispatch(setUser(null))
-              }}
-              >Logout
-              </button></p>
+            <Router>
+              <h2>blogs</h2>
+              <p>{user.name} logged in
+                <button onClick={() => {
+                  loginService.logout()
+                  blogService.setToken('')
+                  dispatch(setUser(null))
+                }}
+                >Logout
+                </button></p>
 
-            {blogForm()}
-
-            {blogs.map(blog => { if(blog !== undefined)
-              return <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} user={user}/>
-            else return null
-            })}
+              <Switch>
+                <Route path='/users'>
+                  <Users users={users}/>
+                </Route>
+                <Route exact path='/'>
+                  {blogForm()}
+                  {blogs.map(blog => { if(blog !== undefined)
+                    return <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} user={user}/>
+                  else return null
+                  })}
+                </Route>
+              </Switch>
+            </Router>
           </div>
       }
 
