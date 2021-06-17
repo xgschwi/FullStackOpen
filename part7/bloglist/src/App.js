@@ -9,16 +9,19 @@ import Togglable from './components/Togglable'
 
 import { notify } from './reducers/notificationReducer'
 import { setFlag } from './reducers/flagReducer'
-import { useDispatch } from 'react-redux'
+import { setBlogs } from './reducers/blogReducer'
+import { setUser } from './reducers/userReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Run backend from part4 code
 const App = () => {
   const dispatch = useDispatch()
 
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(state => state.blogs)
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.user)
 
 
   const blogFormRef = useRef()
@@ -26,7 +29,7 @@ const App = () => {
   // Called to sort and set blog list
   const sortBlog = (bSort) => {
     const sorted = [...bSort].sort((b1, b2) => b2.likes - b1.likes)
-    setBlogs( sorted )
+    dispatch(setBlogs( sorted ))
   }
 
   const blogForm = () => {
@@ -48,9 +51,9 @@ const App = () => {
     try {
       const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
       if(loggedUserJSON) {
-        const user = JSON.parse(loggedUserJSON)
-        setUser(user)
-        blogService.setToken(user.token)
+        const tUser = JSON.parse(loggedUserJSON)
+        dispatch(setUser(tUser))
+        blogService.setToken(tUser.token)
       }
     }
     catch(e) {console.log(e)}
@@ -62,7 +65,6 @@ const App = () => {
     blogService.create(blogObj).then(res => {
 
       sortBlog(blogs.concat(res))
-      //setBlogs(blogs.concat(res))
 
       dispatch(setFlag(true))
       dispatch(notify(`A new blog ${res.title} by ${res.author} added`, 5))
@@ -109,14 +111,14 @@ const App = () => {
         user === null ?
           <LoginForm username = {username} password = {password}
             setUsername = {setUsername} setPassword = {setPassword}
-            setUser = {setUser}/> :
+          /> :
           <div>
             <h2>blogs</h2>
             <p>{user.name} logged in
               <button onClick={() => {
                 loginService.logout(setUser)
                 blogService.setToken('')
-                setUser(null)
+                dispatch(setUser(null))
               }}
               >Logout
               </button></p>

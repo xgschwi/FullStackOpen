@@ -3,9 +3,10 @@ import loginService from '../services/login'
 import blogService from '../services/blogs'
 import { notify } from '../reducers/notificationReducer'
 import { setFlag } from '../reducers/flagReducer'
+import { setUser } from '../reducers/userReducer'
 import { useDispatch } from 'react-redux'
 
-const LoginForm = ({ username, password, setUsername, setPassword, setUser }) => {
+const LoginForm = ({ username, password, setUsername, setPassword }) => {
 
   const dispatch = useDispatch()
 
@@ -26,7 +27,7 @@ const LoginForm = ({ username, password, setUsername, setPassword, setUser }) =>
       dispatch(setFlag(true))
       dispatch(notify('Successfully signed in!', 5))
 
-      setUser(user)
+      dispatch(setUser(user))
       setUsername('')
       setPassword('')
     } catch(e) {
