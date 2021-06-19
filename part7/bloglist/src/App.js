@@ -7,6 +7,7 @@ import userService from './services/users'
 
 import LoginForm from './components/LoginForm'
 import Users from './components/Users'
+import User from './components/User'
 import BlogForm from './components/BlogForm'
 import Blog from './components/Blog'
 
@@ -20,8 +21,7 @@ import { setUser } from './reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
-  BrowserRouter as Router,
-  Switch, Route
+  Switch, Route, useRouteMatch
 } from 'react-router-dom'
 
 // Run backend from part4 code
@@ -40,6 +40,13 @@ const App = () => {
 
   const blogFormRef = useRef()
 
+  const match = useRouteMatch('/users/:id')
+
+  const linkUser = match
+    ? users.find(u => u.id === match.params.id)
+    : null
+
+  //console.log(typeof match.params.id, linkUser, typeof users[0].id)
   // Called to sort and set blog list
   const sortBlog = (bSort) => {
     const sorted = [...bSort].sort((b1, b2) => b2.likes - b1.likes)
@@ -137,30 +144,33 @@ const App = () => {
             setUsername = {setUsername} setPassword = {setPassword}
           /> :
           <div>
-            <Router>
-              <h2>blogs</h2>
-              <p>{user.name} logged in
-                <button onClick={() => {
-                  loginService.logout()
-                  blogService.setToken('')
-                  dispatch(setUser(null))
-                }}
-                >Logout
-                </button></p>
 
-              <Switch>
-                <Route path='/users'>
-                  <Users users={users}/>
-                </Route>
-                <Route exact path='/'>
-                  {blogForm()}
-                  {blogs.map(blog => { if(blog !== undefined)
-                    return <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} user={user}/>
-                  else return null
-                  })}
-                </Route>
-              </Switch>
-            </Router>
+            <h2>blogs</h2>
+            <p>{user.name} logged in
+              <button onClick={() => {
+                loginService.logout()
+                blogService.setToken('')
+                dispatch(setUser(null))
+              }}
+              >Logout
+              </button></p>
+
+            <Switch>
+              <Route path='/users/:id'>
+                <User user={linkUser}/>
+              </Route>
+              <Route path='/users'>
+                <Users users={users}/>
+              </Route>
+              <Route exact path='/'>
+                {blogForm()}
+                {blogs.map(blog => { if(blog !== undefined)
+                  return <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} user={user}/>
+                else return null
+                })}
+              </Route>
+            </Switch>
+
           </div>
       }
 
