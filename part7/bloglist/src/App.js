@@ -9,6 +9,7 @@ import LoginForm from './components/LoginForm'
 import Users from './components/Users'
 import User from './components/User'
 import BlogForm from './components/BlogForm'
+import Blogs from './components/Blogs'
 import Blog from './components/Blog'
 
 import Notification from './components/Notification'
@@ -40,10 +41,15 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const match = useRouteMatch('/users/:id')
+  const userMatch = useRouteMatch('/users/:id')
+  const blogMatch = useRouteMatch('/blogs/:id')
 
-  const linkUser = match
-    ? users.find(u => u.id === match.params.id)
+  const linkUser = userMatch
+    ? users.find(u => u.id === userMatch.params.id)
+    : null
+
+  const blogLink = blogMatch
+    ? blogs.find(b => b.id === blogMatch.params.id)
     : null
 
   //console.log(typeof match.params.id, linkUser, typeof users[0].id)
@@ -156,6 +162,9 @@ const App = () => {
               </button></p>
 
             <Switch>
+              <Route path='/blogs/:id'>
+                <Blog blog={blogLink} addLike={addLike} removeBlog={removeBlog} user={user}/>
+              </Route>
               <Route path='/users/:id'>
                 <User user={linkUser}/>
               </Route>
@@ -164,10 +173,7 @@ const App = () => {
               </Route>
               <Route exact path='/'>
                 {blogForm()}
-                {blogs.map(blog => { if(blog !== undefined)
-                  return <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} user={user}/>
-                else return null
-                })}
+                <Blogs blogs={blogs}/>
               </Route>
             </Switch>
 
