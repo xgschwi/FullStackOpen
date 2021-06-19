@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react'
 
 
 import blogService from './services/blogs'
-import loginService from './services/login'
+
 import userService from './services/users'
 
+import Menu from './components/Menu'
 import LoginForm from './components/LoginForm'
 import Users from './components/Users'
 import User from './components/User'
@@ -150,16 +151,8 @@ const App = () => {
             setUsername = {setUsername} setPassword = {setPassword}
           /> :
           <div>
-
+            <Menu user={user} dispatch={dispatch}/>
             <h2>blogs</h2>
-            <p>{user.name} logged in
-              <button onClick={() => {
-                loginService.logout()
-                blogService.setToken('')
-                dispatch(setUser(null))
-              }}
-              >Logout
-              </button></p>
 
             <Switch>
               <Route path='/blogs/:id'>

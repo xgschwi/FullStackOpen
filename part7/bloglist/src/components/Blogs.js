@@ -13,8 +13,6 @@ const Blogs = ({ blogs }) => {
 
   return(  blogs
     ? <div>
-      <h3>Blogs</h3>
-
       {
         blogs.map(blog => { if(blog !== undefined)
           return <div key={blog.id} style={blogStyle}><Link to={`/blogs/${blog.id}`}>{ blog.title }</Link></div>
