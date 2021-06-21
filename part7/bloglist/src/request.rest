@@ -1,7 +1,0 @@
-HTTP POST api/blogs/60ca4c9fcc6137309c61b368/comments
-Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYwY2E0YjZlNGNlZWNiNDY3Y2FkMmE1NSIsImlhdCI6MTYyNDA3NTE5OX0.MSK-Za4SPEgv77QFydQ54NcSjECYkiCnuDXNignjaxc'
-Content-Type: application/json
-
-[
-    "First Comment"
-]

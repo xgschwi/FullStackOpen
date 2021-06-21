@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 const Users = ({ users }) => (
   users
     ? <div>
       <h3>Users</h3>
-      <table>
+      <Table striped>
         <tbody>
           <tr>
             <th>Users</th><th>Blogs created</th>
@@ -18,7 +19,7 @@ const Users = ({ users }) => (
             )
           }
         </tbody>
-      </table>
+      </Table>
     </div>
     : null
 )

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
+import { Form, Button } from 'react-bootstrap'
 
 const Blog = ({ blog, addLike, removeBlog, user }) => {
 
@@ -42,20 +43,20 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
       <div>
         <p>{blog.url}</p>
         <p>Likes {blog.likes}
-          <button className='likeBtn' onClick={() => addLike(blog)}>Like</button>
+          <Button variant='primary' className='likeBtn' onClick={() => addLike(blog)}>Like</Button>
         </p>
         <p>{blog.user.name}</p>
         { user.username === blog.user.username ?
-          <button className='deleteBtn' onClick={() => removeBlog(blog)}>Remove</button> :
+          <Button variant='danger' className='deleteBtn' onClick={() => removeBlog(blog)}>Remove</Button> :
           null
         }
       </div>
       <div>
         <h3>Comments</h3>
-        <form onSubmit={addComment}>
-          <input type='text' name='comment' id='comment' value={c} onChange={({ target }) => setComment(target.value)}/>
-          <button type='submit'>Add Comment</button>
-        </form>
+        <Form onSubmit={addComment}>
+          <Form.Control type='text' name='comment' id='comment' value={c} onChange={({ target }) => setComment(target.value)}/>
+          <Button variant='primary' type='submit'>Add Comment</Button>
+        </Form>
         {blog.comments
           ? <ul> {
             blog.comments.map(comment => <li key={inc++}>{comment}</li> )

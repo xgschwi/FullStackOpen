@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Form, Button } from 'react-bootstrap'
 
 const BlogForm = ({ createBlog }) => {
 
@@ -25,21 +26,18 @@ const BlogForm = ({ createBlog }) => {
   return(
     <div>
       <h2>Add a Blog</h2>
-      <form onSubmit={addBlog} className="formDiv">
-        <div>
-                    Title: <input id="title" value={title} name="title"
-            onChange={({ target }) => setTitle(target.value)}/>
-        </div>
-        <div>
-                    Author: <input id="author" value={author} name="author"
-            onChange={({ target }) => setAuthor(target.value)}/>
-        </div>
-        <div>
-                    Url: <input id="url" value={url} name="url"
-            onChange={({ target }) => setUrl(target.value)}/>
-        </div>
-        <button type="submit">Add</button>
-      </form>
+      <Form onSubmit={addBlog}>
+        <Form.Label>Title:</Form.Label>
+        <Form.Control type='text' id="title" value={title} name="title"
+          onChange={({ target }) => setTitle(target.value)}/>
+        <Form.Label>Author:</Form.Label>
+        <Form.Control type='text' id="author" value={author} name="author"
+          onChange={({ target }) => setAuthor(target.value)}/>
+        <Form.Label>Url:</Form.Label>
+        <Form.Control type='text' id="url" value={url} name="url"
+          onChange={({ target }) => setUrl(target.value)}/>
+        <Button variant='primary' type="submit">Add</Button>
+      </Form>
     </div>
   )
 }
