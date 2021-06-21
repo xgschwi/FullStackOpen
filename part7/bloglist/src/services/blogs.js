@@ -21,12 +21,17 @@ const update = async blog => {
   return res.data
 }
 
+const addComment = async blog => {
+  const res = await axios.post(`${baseUrl}/${blog.id}/comments`, blog)
+  return res.data
+}
+
 const remove = async blog => {
   const config = { headers: { authorization: token } }
 
   const res = await axios.delete(`${baseUrl}/${blog.id}`, config)
   return res.data
 }
-const exportObj = { getAll, setToken, create, update, remove }
+const exportObj = { getAll, setToken, create, update, remove, addComment }
 
 export default exportObj

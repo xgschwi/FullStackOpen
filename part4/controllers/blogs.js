@@ -28,7 +28,8 @@ blogRouter.post('/', async (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes,
-    user: user._id
+    user: user._id,
+    comments: []
   })
 
   if(blog.likes === undefined) blog.likes = 0
@@ -75,12 +76,29 @@ blogRouter.put('/:id', async (request, response) => {
     url: body.url,
     likes: body.likes,
     __v: 0,
-    id: body.id
+    id: body.id,
+    comments: body.comments || []
   }
 
   await Blog.findByIdAndUpdate(request.params.id, newNote, { new: true })
   response.status(200).end()
 })
 
+blogRouter.post('/:id/comments', async (request, response) => {
+  const body = request.body
+
+  const commentBlog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+    __v: 0,
+    id: body.id,
+    comments: body.comments
+  }
+
+  await Blog.findByIdAndUpdate(request.params.id, commentBlog, { new: true })
+  response.status(200).end()
+})
 module.exports = blogRouter
 
