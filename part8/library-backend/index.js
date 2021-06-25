@@ -1,6 +1,20 @@
 const { ApolloServer, gql } = require('apollo-server')
 const {v1: uuid } = require('uuid')
+const mongoose = require('mongoose')
+const config = require('./config')
 
+const Book = require('./models/Book')
+const Author = require('./models/Author')
+
+mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
+
+/*
 let authors = [
   {
     name: 'Robert Martin',
@@ -26,7 +40,7 @@ let authors = [
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
 ]
-
+*/
 /*
  * Suomi:
  * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
@@ -36,7 +50,7 @@ let authors = [
  * It might make more sense to associate a book with its author by storing the author's name in the context of the book instead of the author's id
  * However, for simplicity, we will store the author's name in connection with the book
 */
-
+/*
 let books = [
   {
     title: 'Clean Code',
@@ -88,12 +102,12 @@ let books = [
     genres: ['classic', 'revolution']
   },
 ]
-
+*/
 const typeDefs = gql`
   type Book {
     title: String!
     published: Int!
-    author: String!
+    author: Author!
     id: ID!
     genres: [String!]!
   }
@@ -103,6 +117,13 @@ const typeDefs = gql`
     id: ID!
     born: Int
     bookCount: Int!
+  }
+  
+  input authorInput {
+    name: String!,
+    id: ID,
+    born: Int,
+    bookCount: Int
   }
 
   type Query {
@@ -115,7 +136,7 @@ const typeDefs = gql`
   type Mutation {
     addBook(
       title: String!,
-      author: String!,
+      author: authorInput,
       published: Int!,
       genres: [String!]!
     ): Book
@@ -126,43 +147,42 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
+    bookCount: () => Book.collection.countDocuments(),  
+    authorCount: () => Author.collection.countDocuments(),
+    allBooks: async (root, args) => {
+      const books = await Book.find({}).populate('author', {name: 1, bookCount: 1})
+
       if (!args.author && !args.genre) return books
       else {
         if (!args.author) return books.filter(b => b.genres.includes(args.genre)) // If genre is the only given argument
-        else if (!args.genre) return books.filter(b => b.author === args.author) // If author is the only given argument
+        else if (!args.genre) return books.filter(b => b.author.name === args.author) // If author is the only given argument
         else return books.filter (b => b.author === args.author && b.genres.includes(args.genre)) // If author and genre are given arguments
       }
     },
-    allAuthors: () => authors.map(a => {
-        let count = 0
-        books.forEach(b => {if(b.author === a.name) count = count + 1})
-        
-        return {
-        ...a, bookCount: count  
-        }
-    })
+    allAuthors: () => Author.find({})
   },
 
   Mutation: {
     addAuthor: (root, args) => {
       let author
+      if (root) author = new Author({name: root, bookCount: 0})
+      else author = new Author({...args, bookCount: 0})
 
-      if (root) author = {name: root, id: uuid()}
-      else author = {...args, id: uuid()}
-
-      authors = authors.concat(author)
-      return author
+      return author.save()
     },
-    addBook: (root, args) => {
-      const book = {...args, id: uuid()}
-      books = books.concat(book)
+    addBook: async (root, args) => {
+      const book = new Book({...args})
 
-      if (!authors.find(a => a.name === args.author)) resolvers.Mutation.addAuthor(args.author)
+      let author = await Author.findOne({"name": args.author.name})
 
-      return book
+      if (!author) author = await resolvers.Mutation.addAuthor(args.author.name)
+
+      author.bookCount = author.bookCount + 1
+      await author.save()
+
+      book.author = author
+
+      return book.save()
     },
     editAuthor: (root, args) => {
       let edit = authors.find(a => a.name === args.name)
