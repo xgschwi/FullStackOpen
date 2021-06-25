@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql, UserInputError } = require('apollo-server')
 const {v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const config = require('./config')
@@ -47,7 +47,7 @@ const typeDefs = gql`
   type Mutation {
     addBook(
       title: String!,
-      author: authorInput,
+      author: authorInput!,
       published: Int!,
       genres: [String!]!
     ): Book
@@ -74,26 +74,42 @@ const resolvers = {
   },
 
   Mutation: {
-    addAuthor: (root, args) => {
+    addAuthor: async (root, args) => {
       let author
 
       if (root) author = new Author({name: root, bookCount: 0}) // Processes if called by another resolver
       else author = new Author({...args, bookCount: 0}) // Processes if called by query
 
-      return author.save()
+      try {
+        await author.save()
+      } catch (e) {
+        throw new UserInputError(e.message, {
+          invalidArgs: args
+        })
+      }
+
+      return author
     },
     addBook: async (root, args) => {
       const book = new Book({...args})
 
       let author = await Author.findOne({"name": args.author.name})
 
-      if (!author) author = await resolvers.Mutation.addAuthor(args.author.name)
+      try {
+        if (!author) author = await resolvers.Mutation.addAuthor(args.author.name)
 
-      author.bookCount = author.bookCount + 1
-      await author.save()
-      book.author = author
+        author.bookCount = author.bookCount + 1
+        await author.save()
+        book.author = author
 
-      return book.save()
+        await book.save()
+      } catch (e) {
+        throw new UserInputError(e.message, {
+          invalidArgs: args
+        })
+      }
+
+      return book
     },
     editAuthor: async (root, args) => { 
       await Author.findOneAndUpdate( { name: { $in: args.name } }, { $set: { born: args.setBornTo } } )
