@@ -117,13 +117,14 @@ const resolvers = {
     },
 
     addBook: async (root, args, context) => {
+      console.log(args)
       const book = new Book({ ...args })
 
       const currentUser = context.currentUser
       if (!currentUser) throw new AuthenticationError('Not Authenticated')
 
       let author = await Author.findOne({ "name": args.author.name })
-
+      console.log(args)
       try {
         if (!author) author = await resolvers.Mutation.addAuthor(args.author.name)
 

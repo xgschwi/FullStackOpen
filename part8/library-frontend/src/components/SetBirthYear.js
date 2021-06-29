@@ -4,7 +4,7 @@ import Select from 'react-select'
 import { ALL_AUTHORS, CHANGE_AUTHOR } from "../queries"
 
 const SetBirthYear = ( { authors } ) => {
-  const [ name, setName ] = useState(null)
+  const [ name, setName ] = useState('')
   const [ born, setBorn ] = useState('')
   const [ editAuthor ] = useMutation(CHANGE_AUTHOR, {refetchQueries: [ { query: ALL_AUTHORS } ] } )
 
