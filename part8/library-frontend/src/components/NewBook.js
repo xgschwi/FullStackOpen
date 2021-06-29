@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { useMutation } from '@apollo/client'
-import { ALL_BOOKS, ALL_AUTHORS, CREATE_BOOK } from '../queries'
+import React, { useState, useEffect } from 'react'
+import { useMutation, useQuery } from '@apollo/client'
+import { ALL_BOOKS, ALL_AUTHORS, CREATE_BOOK, BOOKS_BY_GENRE, FAV_GENRE } from '../queries'
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('')
@@ -9,11 +9,21 @@ const NewBook = (props) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
+  const favGenreQ = useQuery(FAV_GENRE)
+  const [favGenre, setFavGenre] = useState(null)
+
+  // Sets Favorite Genre for refetching queries following book creation
+  useEffect(() => {
+    if (props.token && favGenreQ.data && favGenreQ.data.me) {
+        setFavGenre(favGenreQ.data.me.favoriteGenre)
+    }
+  }, [props.token, favGenreQ.data, setFavGenre])
+
   const [createBook] = useMutation(CREATE_BOOK, {
     onError: (e) => {
       console.log(e.graphQLErrors)
     },
-    refetchQueries: [ { query: ALL_AUTHORS }, { query: ALL_BOOKS } ]
+    refetchQueries: [ { query: ALL_AUTHORS }, { query: ALL_BOOKS }, { query: BOOKS_BY_GENRE, variables: {genre: favGenre }} ]
   })
 
   if (!props.show) {

@@ -8,6 +8,7 @@ const Recommendations = (props) => {
    const [books, setBooks] = useState(null)
    const [genre, setGenre] = useState(null)
 
+   // Queries for list of recommended books based on user's favorite genre
    useEffect(() => {
        if (props.token && favGenreQ.data && favGenreQ.data.me) {
            getRec({ variables: {genre: favGenreQ.data.me.favoriteGenre } })
