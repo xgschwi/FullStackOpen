@@ -20,7 +20,7 @@ const Login = ({ show, setToken, setPage }) => {
          setUsername('')
          setPassword('')
        }
-   }, [result.data])
+   }, [result.data, setPage, setToken])
 
    if (!show) {
       return null

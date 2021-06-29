@@ -28,7 +28,10 @@ const Books = (props) => {
   return (
     <div>
       <h2>books</h2>
-
+      {
+         genre ? <p>In Genre: {genre}</p>
+        : null
+      }
       <table>
         <tbody>
           <tr>
