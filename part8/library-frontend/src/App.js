@@ -16,11 +16,14 @@ const App = () => {
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
       window.alert(`${subscriptionData.data.bookAdded.title} added!`)
+      client.reFetchObservableQueries() // Alternative since updating via read/writeQuery is not updating useQuery hook
     }
   })
+
   useEffect(() => {
     setToken(localStorage.getItem('library-user-token'))
   },[])
+
 
   return (
     <div>
