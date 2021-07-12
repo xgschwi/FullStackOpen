@@ -1,14 +1,20 @@
-const calculateBmi = () : string => {
+export const calculateBmi = (args?: Array<number>) : string => {
 
    let height: number;
    let weight: number;
 
-   try {
-      height = Number(process.argv[2]);
-      weight = Number(process.argv[3]);
+   if (!args) {
+      try {
+         height = Number(process.argv[2]);
+         weight = Number(process.argv[3]);
+      }
+      catch (e) {
+         throw new Error(e.message);
+      }
    }
-   catch (e) {
-      throw new Error(e.message);
+   else {
+      height = args[0];
+      weight = args[1];
    }
 
    if (height === 0 || weight === 0) throw new Error('Height and Weight cannot be 0');
@@ -21,5 +27,3 @@ const calculateBmi = () : string => {
    else if (bmi < 30) return 'Overweight II (Moderately Obese Weight)';
    else return 'Overweight III (Severely obese)';
 }
-
-console.log(calculateBmi())
