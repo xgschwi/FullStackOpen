@@ -12,6 +12,8 @@ const JWT_SECRET = config.secret
 const User = require('./models/User')
 const Book = require('./models/Book')
 const Author = require('./models/Author')
+const batchAuthors = require('./loaders')
+const DataLoader = require('dataloader')
 
 mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
   .then(() => {
@@ -20,7 +22,7 @@ mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: t
   .catch((error) => {
     console.log('error connection to MongoDB:', error.message)
   })
-
+mongoose.set('debug', true)
 const typeDefs = gql`
   type Book {
     title: String!
@@ -100,8 +102,10 @@ const resolvers = {
         else return books.filter (b => b.author === args.author && b.genres.includes(args.genre)) // If author and genre are given arguments
       }
     },
-    allAuthors: () => Author.find({}),
-    me: (root, args, context) => context.currentUser
+    allAuthors: async (root, args, context) => {
+      return await Author.find({})
+    },
+    me: async (root, args, context) => context.currentUser
   },
 
   Mutation: {
@@ -189,7 +193,11 @@ const resolvers = {
     bookAdded: {
       subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
     }
+  },
+  Author: ({ authorId }, _args, context) => {
+    context.author.load(authorId)
   }
+  
 }
 
 const server = new ApolloServer({
@@ -205,7 +213,7 @@ const server = new ApolloServer({
 
       const currentUser = await User.findById(decodedToken.id)
 
-      return { currentUser }
+      return { currentUser, author: new DataLoader(keys => batchAuthors(keys)) }
     }
   }
 })
