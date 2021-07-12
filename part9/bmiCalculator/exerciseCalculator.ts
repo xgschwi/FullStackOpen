@@ -8,8 +8,26 @@ interface Result {
    average: number
 }
 
-const calculateExercises = (days: Array<number>, target: number): Result => {
+const calculateExercises = (): Result => {
+
+   let days: Array<number> = [];
+   let target: number;
+   let periodLength: number;
+
+   try {
+      target = Number(process.argv[2]);
+      periodLength = process.argv.length - 3;
+
+      process.argv.forEach((value, index) => {
+          if (index > 2) days.push(Number(value));
+      })
+
+   } catch(e) {
+       throw new Error(e.message);
+   }
+
    const trainingDays = days.filter(day => day != 0);
+
    let sum: number;
 
    trainingDays.forEach(day => {
@@ -27,7 +45,7 @@ const calculateExercises = (days: Array<number>, target: number): Result => {
    else { rating = 3; ratingDescription = 'Great job! You reached your goal'; }
 
    return {
-      periodLength: days.length,
+      periodLength,
       trainingDays: trainingDays.length,
       target,
       average,
@@ -37,4 +55,4 @@ const calculateExercises = (days: Array<number>, target: number): Result => {
    }
 } 
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+console.log(calculateExercises());
