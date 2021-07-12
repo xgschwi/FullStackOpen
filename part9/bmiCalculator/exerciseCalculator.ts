@@ -28,10 +28,9 @@ const calculateExercises = (): Result => {
 
    const trainingDays = days.filter(day => day != 0);
 
-   let sum: number;
+   let sum = 0;
 
    trainingDays.forEach(day => {
-       if (isNaN(sum)) sum = 0;
        sum = sum + day;
    })
 
