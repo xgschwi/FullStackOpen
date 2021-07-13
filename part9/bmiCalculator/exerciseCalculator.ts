@@ -8,22 +8,33 @@ interface Result {
    average: number
 }
 
-const calculateExercises = (): Result => {
+export const calculateExercises = (dayArg?: Array<number>, targetArg?: number): Result => {
 
    const days: Array<number> = [];
    let target: number;
    let periodLength: number;
 
-   try {
-      target = Number(process.argv[2]);
-      periodLength = process.argv.length - 3;
-
-      process.argv.forEach((value, index) => {
-          if (index > 2) days.push(Number(value));
+   if (dayArg && targetArg) {
+      dayArg.forEach(value => {
+         days.push(value);
       });
 
-   } catch(e) {
-       throw new Error(e);
+      target = targetArg;
+      
+      periodLength = days.length;
+   }
+   else {
+      try {
+         target = Number(process.argv[2]);
+         periodLength = process.argv.length - 3;
+
+         process.argv.forEach((value, index) => {
+            if (index > 2) days.push(Number(value));
+         });
+
+      } catch(_e) {
+         throw new Error('Malformatted Parameters');
+      }
    }
 
    const trainingDays = days.filter(day => day != 0);
@@ -53,5 +64,3 @@ const calculateExercises = (): Result => {
       ratingDescription
    };
 };
-
-console.log(calculateExercises());
