@@ -8,8 +8,9 @@ export const calculateBmi = (args?: Array<number>) : string => {
          height = Number(process.argv[2]);
          weight = Number(process.argv[3]);
       }
-      catch (e) {
-         throw new Error(e.message);
+      catch (e)
+      {
+         throw new Error(e);
       }
    }
    else {
@@ -26,4 +27,4 @@ export const calculateBmi = (args?: Array<number>) : string => {
    else if (bmi < 25) return 'Overweight I (At Risk Weight)';
    else if (bmi < 30) return 'Overweight II (Moderately Obese Weight)';
    else return 'Overweight III (Severely obese)';
-}
+};

@@ -10,7 +10,7 @@ interface Result {
 
 const calculateExercises = (): Result => {
 
-   let days: Array<number> = [];
+   const days: Array<number> = [];
    let target: number;
    let periodLength: number;
 
@@ -20,10 +20,10 @@ const calculateExercises = (): Result => {
 
       process.argv.forEach((value, index) => {
           if (index > 2) days.push(Number(value));
-      })
+      });
 
    } catch(e) {
-       throw new Error(e.message);
+       throw new Error(e);
    }
 
    const trainingDays = days.filter(day => day != 0);
@@ -32,7 +32,7 @@ const calculateExercises = (): Result => {
 
    trainingDays.forEach(day => {
        sum = sum + day;
-   })
+   });
 
    const average = sum / days.length;
 
@@ -51,7 +51,7 @@ const calculateExercises = (): Result => {
       success: average > target ? true : false,
       rating,
       ratingDescription
-   }
-} 
+   };
+};
 
 console.log(calculateExercises());

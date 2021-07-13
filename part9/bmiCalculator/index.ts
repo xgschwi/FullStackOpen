@@ -1,4 +1,4 @@
-import express from 'express'
+import express from 'express';
 import { calculateBmi } from './bmiCalculator';
 
 const app = express();
@@ -25,7 +25,7 @@ app.get('/bmi', (req, res) => {
       error: 'Malformatted Parameters'
     });
   }
-})
+});
 
 const PORT = 3003;
 
