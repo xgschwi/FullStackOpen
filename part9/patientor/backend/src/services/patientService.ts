@@ -1,10 +1,10 @@
-import { NonSensitivePatient, NewPatient, Patient } from '../types';
+import { PublicPatient, NewPatient, Patient } from '../types';
 import patientData from '../data/patients';
 import {v1 as uuid} from 'uuid';
 
-const getNonSensitivePatients = (): NonSensitivePatient[] => {
+const getPublicPatients = (): PublicPatient[] => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const data: NonSensitivePatient[] = patientData.map(({ssn, ...data}) => ({
+    const data: PublicPatient[] = patientData.map(({ssn, ...data}) => ({
         ...data
     }));
     return data;
@@ -20,7 +20,11 @@ const addPatient = (patient: NewPatient): Patient => {
     patientData.push(newPatient);
     return newPatient;
 };
+
+const findPatient = (pid: string): Patient | undefined => patientData.find(p => p.id === pid);
+
 export default{
-    getNonSensitivePatients,
-    addPatient
+    getPublicPatients,
+    addPatient,
+    findPatient
 };

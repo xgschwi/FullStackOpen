@@ -45,6 +45,10 @@ const parseDateOfBirth = (dob: unknown): string | undefined => {
     else if (!isString(dob) || !isDate(dob)) throw new Error('Incorrect Date of Birth: ' + dob);
     else return dob;
 };
+/*
+const parseEntries = (entries: unknown): Entry[] => {
+    return entries;
+}*/
 
 const toNewPatient = ( fields: PatientFields): NewPatient => {
     const newPatient: NewPatient = {
@@ -52,7 +56,8 @@ const toNewPatient = ( fields: PatientFields): NewPatient => {
         occupation: parseOccupation(fields.occupation),
         gender: parseGender(fields.gender),
         ssn: parseSsn(fields.ssn),
-        dateOfBirth: parseDateOfBirth(fields.dateOfBirth)
+        dateOfBirth: parseDateOfBirth(fields.dateOfBirth),
+        entries: fields.entries//parseEntries(fields.entries)
     };
 
     return newPatient;
