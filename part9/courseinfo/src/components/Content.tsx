@@ -1,5 +1,6 @@
 import React from "react";
 import { CoursePart } from "../types";
+import Part from "./Part";
 
 const Content = ({ courseParts }: {courseParts: Array<CoursePart>}): JSX.Element => (
     <div>
@@ -7,7 +8,7 @@ const Content = ({ courseParts }: {courseParts: Array<CoursePart>}): JSX.Element
             courseParts.map(part => 
             {
                 return <div key={part.name}>
-                    <p>{part.name}</p> <p>{part.exerciseCount}</p>
+                    <Part part={part}/>
                 </div>
             })
         }
